@@ -65,7 +65,7 @@ func (d Detect) aleoProject(appDir string) (bool, error) {
 	}
 
 	buildDirectory := filepath.Join(appDir, "build")
-	extension := "*.aleo"
+	extension := ".aleo"
 	_, err = checkFilesWithExtension(buildDirectory, extension)
 	if err != nil {
 		return false, fmt.Errorf("unable to determine if build/*.aleo exists\n%w", err)
