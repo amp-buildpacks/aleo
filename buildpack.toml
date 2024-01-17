@@ -19,7 +19,7 @@ api = "0.8"
   homepage = "https://github.com/amp-buildpacks/aleo"
   id = "amp-buildpacks/aleo"
   keywords = ["leo", "snarkOS", "Aleo"]
-  name = "Paketo Buildpack for Aleo Tool Suite"
+  name = "AMP Buildpack for Aleo Tool Suite"
   sbom-formats = ["application/vnd.cyclonedx+json", "application/vnd.syft+json"]
   version = "0.1.0"
 
