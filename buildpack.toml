@@ -37,6 +37,32 @@ api = "0.8"
     description = "the Aleo version"
     name = "BP_ALEO_VERSION"
 
+  [[metadata.configurations]]
+    build = true
+    default = "true"
+    description = "Enable Aleo deployment features"
+    name = "BP_ENABLE_ALEO_DEPLOY"
+
+  # https://developer.aleo.org/testnet/getting_started/deploy_execute
+  [[metadata.configurations]]
+    build = true
+    description = "the Aleo wallet private key"
+    name = "BP_ALEO_DEPLOY_PRIVATE_KEY"
+
+  [[metadata.configurations]]
+    build = true
+    # default = "https://api.explorer.aleo.org/v1"
+    default = "https://explorer.hamp.app"
+    description = "The endpoint to query node state from Aleo network"
+    name = "BP_ALEO_DEPLOY_API_URL"
+
+  [[metadata.configurations]]
+    build = true
+    default = "100"
+    description = "The priority fee in microcredits of deploy"
+    name = "BP_ALEO_DEPLOY_PRIORITY_FEE"
+
+
   [[metadata.dependencies]]
     id = "aleo-gnu"
     name = "Aleo (GNU libc)"

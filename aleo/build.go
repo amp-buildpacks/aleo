@@ -55,6 +55,10 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 	aleoLayer := NewAleo(aleoDependency, dc)
 	aleoLayer.Logger = b.Logger
 
+	result.Processes, err = aleoLayer.BuildProcessTypes(cr, context.Application)
+	if err != nil {
+		return libcnb.BuildResult{}, fmt.Errorf("unable to build list of process types\n%w", err)
+	}
 	result.Layers = append(result.Layers, aleoLayer)
 
 	return result, nil

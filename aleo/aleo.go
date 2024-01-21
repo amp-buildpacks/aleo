@@ -15,7 +15,9 @@
 package aleo
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -30,6 +32,10 @@ import (
 type Aleo struct {
 	LayerContributor libpak.DependencyLayerContributor
 	Logger           bard.Logger
+}
+
+type AleoApp struct {
+	Program string `json:"program"`
 }
 
 func NewAleo(dependency libpak.BuildpackDependency, cache libpak.DependencyCache) Aleo {
@@ -67,6 +73,77 @@ func (r Aleo) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 	})
 }
 
+func (r Aleo) BuildProcessTypes(cr libpak.ConfigurationResolver, app libcnb.Application) ([]libcnb.Process, error) {
+	processes := []libcnb.Process{}
+
+	enableDeploy := cr.ResolveBool("BP_ENABLE_ALEO_DEPLOY")
+	if enableDeploy {
+		deployProcess, err := r.makeDeployCommand(cr, app)
+		if err != nil {
+			return processes, err
+		}
+		processes = append(processes, deployProcess)
+	}
+	return processes, nil
+}
+
 func (r Aleo) Name() string {
 	return r.LayerContributor.LayerName()
+}
+
+// snarkos developer deploy "${APPNAME}.aleo" --private-key "${PRIVATE_KEY}" \
+// --path "./build/" \
+// --query "${API_URL}" \
+// --broadcast "${API_URL}/testnet3/transaction/broadcast" \
+// --priority-fee 100
+func (r Aleo) makeDeployCommand(cr libpak.ConfigurationResolver, app libcnb.Application) (libcnb.Process, error) {
+	process := libcnb.Process{}
+
+	aleoApp, err := r.ReadAppConfig(app.Path)
+	if err != nil {
+		return process, err
+	}
+
+	privateKey, enableKey := cr.Resolve("BP_ALEO_DEPLOY_PRIVATE_KEY")
+	if !enableKey {
+		return process, fmt.Errorf("BP_ALEO_DEPLOY_PRIVATE_KEY must to be set")
+	}
+
+	apiUrl, _ := cr.Resolve("BP_ALEO_DEPLOY_API_URL")
+	priorityFee, _ := cr.Resolve("BP_ALEO_DEPLOY_PRIORITY_FEE")
+
+	process.Type = "web"
+	process.Default = true
+	process.Command = "snarkos"
+	process.Arguments = []string{
+		"developer",
+		"deploy", aleoApp.Program,
+		"--private-key", privateKey,
+		"--path", filepath.Join(app.Path, "build"),
+		"--query", apiUrl,
+		"--broadcast", apiUrl + "/testnet3/transaction/broadcast",
+		"--priority-fee", priorityFee,
+	}
+	return process, nil
+}
+
+func (r Aleo) ReadAppConfig(appDir string) (AleoApp, error) {
+	aleoApp := AleoApp{}
+
+	fileName := filepath.Join(appDir, "program.json")
+	file, err := os.Open(fileName)
+	if err != nil {
+		return aleoApp, fmt.Errorf("unable to determine if '%s' exists\n%w", fileName, err)
+	}
+	defer file.Close()
+
+	data, err := io.ReadAll(file)
+	if err != nil {
+		return aleoApp, fmt.Errorf("unable to read '%s'\n%w", fileName, err)
+	}
+
+	if err := json.Unmarshal(data, &aleoApp); err != nil {
+		return aleoApp, fmt.Errorf("unable to convert '%s'\n%w", fileName, err)
+	}
+	return aleoApp, nil
 }
