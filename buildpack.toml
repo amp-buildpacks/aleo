@@ -34,7 +34,7 @@ api = "0.8"
   [[metadata.configurations]]
     build = true
     default = "2.2.7"
-    description = "the Aleo version"
+    description = "The Aleo version"
     name = "BP_ALEO_VERSION"
 
   [[metadata.configurations]]
@@ -46,7 +46,7 @@ api = "0.8"
   # https://developer.aleo.org/testnet/getting_started/deploy_execute
   [[metadata.configurations]]
     build = true
-    description = "the Aleo wallet private key"
+    description = "The Aleo wallet private key"
     name = "BP_ALEO_DEPLOY_PRIVATE_KEY"
 
   [[metadata.configurations]]
