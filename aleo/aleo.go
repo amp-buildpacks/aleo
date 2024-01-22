@@ -40,7 +40,6 @@ type AleoApp struct {
 
 func NewAleo(dependency libpak.BuildpackDependency, cache libpak.DependencyCache) Aleo {
 	contributor := libpak.NewDependencyLayerContributor(dependency, cache, libcnb.LayerTypes{
-		Build:  true,
 		Cache:  true,
 		Launch: true,
 	})

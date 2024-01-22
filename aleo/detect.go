@@ -48,8 +48,8 @@ func (d Detect) Detect(context libcnb.DetectContext) (libcnb.DetectResult, error
 					{Name: PlanEntryAleo},
 				},
 				Requires: []libcnb.BuildPlanRequire{
-					{Name: PlanEntryAleo},
 					{Name: PlanEntryLeo},
+					{Name: PlanEntryAleo},
 				},
 			},
 		},
