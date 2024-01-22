@@ -51,8 +51,7 @@ api = "0.8"
 
   [[metadata.configurations]]
     build = true
-    # default = "https://api.explorer.aleo.org/v1"
-    default = "https://explorer.hamp.app"
+    default = "https://api.explorer.aleo.org/v1"
     description = "The endpoint to query node state from Aleo network"
     name = "BP_ALEO_DEPLOY_API_URL"
 
