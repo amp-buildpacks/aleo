@@ -30,36 +30,43 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 	b.Logger.Title(context.Buildpack)
 	result := libcnb.NewBuildResult()
 
-	cr, err := libpak.NewConfigurationResolver(context.Buildpack, &b.Logger)
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to create configuration resolver\n%w", err)
-	}
+	pr := libpak.PlanEntryResolver{Plan: context.Plan}
 
-	dc, err := libpak.NewDependencyCache(context)
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to create dependency cache\n%w", err)
-	}
-	dc.Logger = b.Logger
+	if _, ok, err := pr.Resolve(PlanEntryAleo); err != nil {
+		return libcnb.BuildResult{}, fmt.Errorf("unable to resolve Aleo plan entry\n%w", err)
+	} else if ok {
 
-	dr, err := libpak.NewDependencyResolver(context)
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to create dependency resolver\n%w", err)
-	}
+		cr, err := libpak.NewConfigurationResolver(context.Buildpack, &b.Logger)
+		if err != nil {
+			return libcnb.BuildResult{}, fmt.Errorf("unable to create configuration resolver\n%w", err)
+		}
 
-	v, _ := cr.Resolve("BP_ALEO_VERSION")
-	aleoDependency, err := dr.Resolve("aleo-gnu", v)
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to find dependency\n%w", err)
-	}
+		dc, err := libpak.NewDependencyCache(context)
+		if err != nil {
+			return libcnb.BuildResult{}, fmt.Errorf("unable to create dependency cache\n%w", err)
+		}
+		dc.Logger = b.Logger
 
-	aleoLayer := NewAleo(aleoDependency, dc)
-	aleoLayer.Logger = b.Logger
+		dr, err := libpak.NewDependencyResolver(context)
+		if err != nil {
+			return libcnb.BuildResult{}, fmt.Errorf("unable to create dependency resolver\n%w", err)
+		}
 
-	result.Processes, err = aleoLayer.BuildProcessTypes(cr, context.Application)
-	if err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to build list of process types\n%w", err)
+		v, _ := cr.Resolve("BP_ALEO_VERSION")
+		aleoDependency, err := dr.Resolve("aleo-gnu", v)
+		if err != nil {
+			return libcnb.BuildResult{}, fmt.Errorf("unable to find dependency\n%w", err)
+		}
+
+		aleoLayer := NewAleo(aleoDependency, dc)
+		aleoLayer.Logger = b.Logger
+
+		result.Processes, err = aleoLayer.BuildProcessTypes(cr, context.Application)
+		if err != nil {
+			return libcnb.BuildResult{}, fmt.Errorf("unable to build list of process types\n%w", err)
+		}
+		result.Layers = append(result.Layers, aleoLayer)
 	}
-	result.Layers = append(result.Layers, aleoLayer)
 
 	return result, nil
 }
