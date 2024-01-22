@@ -24,6 +24,7 @@ import (
 
 const (
 	PlanEntryAleo = "aleo"
+	PlanEntryLeo  = "leo"
 )
 
 type Detect struct {
@@ -48,7 +49,7 @@ func (d Detect) Detect(context libcnb.DetectContext) (libcnb.DetectResult, error
 				},
 				Requires: []libcnb.BuildPlanRequire{
 					{Name: PlanEntryAleo},
-					{Name: "leo"},
+					{Name: PlanEntryLeo},
 				},
 			},
 		},
@@ -68,7 +69,7 @@ func (d Detect) aleoProject(appDir string) (bool, error) {
 	buildDirectory := filepath.Join(appDir, "build")
 	extension := ".aleo"
 	if err := existsFilesWithExtension(buildDirectory, extension); err != nil {
-		return false, fmt.Errorf("unable to determine if build/*.aleo exists\n%w", err)
+		return false, fmt.Errorf("unable to determine if '%s/%s' exists\n%w", buildDirectory, extension, err)
 	}
 	return true, nil
 }
