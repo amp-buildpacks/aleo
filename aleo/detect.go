@@ -65,32 +65,5 @@ func (d Detect) aleoProject(appDir string) (bool, error) {
 	if err != nil {
 		return false, fmt.Errorf("unable to determine if program.json exists\n%w", err)
 	}
-
-	buildDirectory := filepath.Join(appDir, "build")
-	extension := ".aleo"
-	if err := existsFilesWithExtension(buildDirectory, extension); err != nil {
-		return false, fmt.Errorf("unable to determine if '%s/%s' exists\n%w", buildDirectory, extension, err)
-	}
 	return true, nil
-}
-
-func existsFilesWithExtension(directory, extension string) error {
-	var found bool
-	err := filepath.Walk(directory, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		// Check if the file has the specified extension.
-		if !info.IsDir() && filepath.Ext(path) == extension {
-			found = true
-			return nil
-		}
-		return nil
-	})
-
-	if !found {
-		return fmt.Errorf("no files with extension '%s' found", extension)
-	}
-	return err
 }
