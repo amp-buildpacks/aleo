@@ -75,7 +75,7 @@ func (r Aleo) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 func (r Aleo) BuildProcessTypes(cr libpak.ConfigurationResolver, app libcnb.Application) ([]libcnb.Process, error) {
 	processes := []libcnb.Process{}
 
-	enableDeploy := cr.ResolveBool("BP_ENABLE_ALEO_DEPLOY")
+	enableDeploy := cr.ResolveBool("BPL_ENABLE_ALEO_DEPLOY")
 	if enableDeploy {
 		deployProcess, err := r.makeDeployCommand(cr, app)
 		if err != nil {
@@ -103,13 +103,13 @@ func (r Aleo) makeDeployCommand(cr libpak.ConfigurationResolver, app libcnb.Appl
 		return process, err
 	}
 
-	privateKey, enableKey := cr.Resolve("BP_ALEO_DEPLOY_PRIVATE_KEY")
+	privateKey, enableKey := cr.Resolve("BPL_ALEO_DEPLOY_PRIVATE_KEY")
 	if !enableKey {
-		return process, fmt.Errorf("BP_ALEO_DEPLOY_PRIVATE_KEY must to be set")
+		return process, fmt.Errorf("BPL_ALEO_DEPLOY_PRIVATE_KEY must to be set")
 	}
 
-	apiUrl, _ := cr.Resolve("BP_ALEO_DEPLOY_API_URL")
-	priorityFee, _ := cr.Resolve("BP_ALEO_DEPLOY_PRIORITY_FEE")
+	apiUrl, _ := cr.Resolve("BPL_ALEO_DEPLOY_API_URL")
+	priorityFee, _ := cr.Resolve("BPL_ALEO_DEPLOY_PRIORITY_FEE")
 
 	process.Type = "web"
 	process.Default = true
