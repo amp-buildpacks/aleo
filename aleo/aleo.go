@@ -20,6 +20,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/buildpacks/libcnb"
 	"github.com/paketo-buildpacks/libpak"
@@ -75,7 +76,7 @@ func (r Aleo) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 func (r Aleo) BuildProcessTypes(cr libpak.ConfigurationResolver, app libcnb.Application) ([]libcnb.Process, error) {
 	processes := []libcnb.Process{}
 
-	enableDeploy := cr.ResolveBool("BPL_ENABLE_ALEO_DEPLOY")
+	enableDeploy := r.ReadEnvBool(cr, "BPL_ENABLE_ALEO_DEPLOY")
 	if enableDeploy {
 		deployProcess, err := r.makeDeployCommand(cr, app)
 		if err != nil {
@@ -124,6 +125,29 @@ func (r Aleo) makeDeployCommand(cr libpak.ConfigurationResolver, app libcnb.Appl
 		"--priority-fee", priorityFee,
 	}
 	return process, nil
+}
+
+func (r Aleo) ReadEnv(cr libpak.ConfigurationResolver, key string) string {
+	value, ok := os.LookupEnv(key)
+	if !ok {
+		cr.Resolve(key)
+	}
+	return value
+}
+
+func (r Aleo) ReadEnvBool(cr libpak.ConfigurationResolver, key string) bool {
+	value, ok := os.LookupEnv(key)
+	if !ok {
+		r.Logger.Bodyf("Read from pack env %s: %s - %v", key, value, ok)
+		return cr.ResolveBool(key)
+	}
+
+	r.Logger.Bodyf("Read from system env %s: %s", key, value)
+	t, err := strconv.ParseBool(value)
+	if err != nil {
+		return false
+	}
+	return t
 }
 
 func (r Aleo) ReadAppConfig(appDir string) (AleoApp, error) {

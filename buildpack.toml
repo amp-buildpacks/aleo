@@ -67,7 +67,7 @@ api = "0.8"
     name = "Aleo (GNU libc)"
     purl = "pkg:generic/aleo@2.2.7"
     sha256 = "1188b09049608284d440246dbbbc03b7b0787792d5d07dc60785ceeed5e2cf49"
-    uri= "https://github.com/AleoHQ/snarkOS/releases/download/v2.2.7/aleo-testnet1-v2.2.7-x86_64-unknown-linux-gnu.zip"
+    uri= "https://gitee.com/lispking/snarkOS/releases/download/v2.2.7/aleo-testnet1-v2.2.7-x86_64-unknown-linux-gnu.zip"
     stacks = ["*"]
     version = "2.2.7"
 
