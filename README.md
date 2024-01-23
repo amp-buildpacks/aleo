@@ -7,10 +7,10 @@ A Cloud Native Buildpack that provides the Aleo Tool Suite
 | Environment Variable      | Description                                                                                                                                                                                                                                                                                       |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `$BP_ALEO_VERSION` | Configure the version of snarkOS to install. It can be a specific version or a wildcard like `1.*`. It defaults to the latest `1.*` version. |
-| `$BP_ENABLE_ALEO_DEPLOY` | Enable Aleo deployment features. Default: `true` |
-| `$BP_ALEO_DEPLOY_PRIVATE_KEY` | The Aleo wallet private key. |
-| `$BP_ALEO_DEPLOY_API_URL` | The endpoint to query node state from Aleo network. Default: `https://api.explorer.aleo.org/v1` |
-| `$BP_ALEO_DEPLOY_PRIORITY_FEE` | The priority fee in microcredits of deploy. Default: `100` |
+| `$BPL_ENABLE_ALEO_DEPLOY` | Enable Aleo deployment features. Default: `true` |
+| `$BPL_ALEO_DEPLOY_PRIVATE_KEY` | The Aleo wallet private key. |
+| `$BPL_ALEO_DEPLOY_API_URL` | The endpoint to query node state from Aleo network. Default: `https://api.explorer.aleo.org/v1` |
+| `$BPL_ALEO_DEPLOY_PRIORITY_FEE` | The priority fee in microcredits of deploy. Default: `100` |
 
 ## Usage
 
