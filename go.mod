@@ -3,8 +3,8 @@ module github.com/amp-buildpacks/aleo
 go 1.23
 
 require (
-	github.com/buildpacks/libcnb v1.30.3
-	github.com/paketo-buildpacks/libpak v1.71.0
+	github.com/buildpacks/libcnb v1.30.4
+	github.com/paketo-buildpacks/libpak v1.72.0
 )
 
 require (
